@@ -1,20 +1,49 @@
 import "./App.css";
 
-function getTitle(title: string): string {
-    return title;
-}
-const numArr: number[] = [1, 2, 3, 4, 5, 6];
+const list = [
+    {
+        title: "React",
+        url: "https://reactjs.org/",
+        author: "Jordan Walke",
+        num_comments: 3,
+        points: 4,
+        objectID: 0,
+    },
+    {
+        title: "Redux",
+        url: "https://redux.js.org/",
+        author: "Dan Abramov, Andrew Clark",
+        num_comments: 2,
+        points: 5,
+        objectID: 1,
+    },
+];
 const App = () => {
     return (
         <>
-            <h1>{getTitle("Gregory")}</h1>
-            <label htmlFor="name">Name: </label>
-            <input type="text" id="name" />
-            <h3>
-                {numArr.map((num) => {
-                    return num;
-                })}
-            </h3>
+            <div className="center">
+                <h1>Hacker Stories</h1>
+                <label htmlFor="search">Search: </label>
+                <input type="text" id="search" />
+            </div>
+            <ul>
+                {list.length !== 0
+                    ? list.map((post) => {
+                          return (
+                              <li key={post.objectID}>
+                                  <span>
+                                      <a href={post.url} target="_blank">
+                                          {post.title}
+                                      </a>
+                                  </span>
+                                  <span> - {post.author}</span>
+                                  <span> [comments: {post.num_comments}]</span>
+                                  <span> [points: {post.points}]</span>
+                              </li>
+                          );
+                      })
+                    : <h1>Oops.</h1>}
+            </ul>
         </>
     );
 };

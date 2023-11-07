@@ -31,7 +31,7 @@ const App = () => {
     );
 };
 
-function List() {
+const List = () => {
     return (
         <ul>
             {list.length !== 0 ? (
@@ -54,15 +54,15 @@ function List() {
             )}
         </ul>
     );
-}
+};
 
-function Search() {
+const Search = () => {
     return (
         <>
             <label htmlFor="search">Search: </label>
             <input type="text" id="search" />
         </>
     );
-}
+};
 
 export default App;

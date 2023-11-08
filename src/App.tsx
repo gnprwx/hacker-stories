@@ -2,6 +2,7 @@ import { useState } from "react";
 import "./App.css";
 
 const App = () => {
+    const [search, setSearch] = useState('');
     const stories = [
         {
             title: "React",
@@ -21,8 +22,9 @@ const App = () => {
         },
     ];
     const handleSearch = (e) => {
-        console.log(e.target.value)
+        setSearch(e.target.value)
     }
+    const filtered = stories.filter((story) => story.title.toLowerCase().includes(search));
 
     return (
         <>
@@ -31,7 +33,7 @@ const App = () => {
                 <Search onSearch={handleSearch} />
             </div>
             <hr />
-            <Posts list={stories} />
+            <Posts list={filtered} />
         </>
     );
 };
@@ -59,17 +61,10 @@ const Post = ({ postItem }) => (
 )
 
 const Search = (props) => {
-    const [search, setSearch] = useState('');
-    const handleChange = (e): void => {
-        setSearch(e.target.value);
-        props.onSearch(e);
-    }
-
     return (
         <>
             <label htmlFor="search">Search: </label>
-            <input type="text" id="search" onChange={handleChange} />
-            <p>Searching for: {search}</p>
+            <input type="text" id="search" onChange={props.onSearch} />
         </>
     );
 };

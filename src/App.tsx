@@ -1,3 +1,4 @@
+import { useState } from "react";
 import "./App.css";
 
 const list = [
@@ -18,44 +19,57 @@ const list = [
         objectID: 1,
     },
 ];
-const App = () => (
-    <>
-        <div className="center">
-            <h1>Hacker Stories</h1>
-            <Search />
-        </div>
-        <hr />
-        <List />
-    </>
-);
-const List = () => (
-    <ul>
-        {list.length !== 0 ? (
-            list.map((post) => {
-                return (
-                    <li key={post.objectID}>
-                        <span>
-                            <a href={post.url} target="_blank">
-                                {post.title}
-                            </a>
-                        </span>
-                        <span> - {post.author}</span>
-                        <span> [comments: {post.num_comments}]</span>
-                        <span> [points: {post.points}]</span>
-                    </li>
-                );
-            })
-        ) : (
-            <h1>Oops.</h1>
-        )}
-    </ul>
-);
+const App = () => {
+    return (
+        <>
+            <div className="center">
+                <h1>Hacker Stories</h1>
+                <Search />
+            </div>
+            <hr />
+            <List />
+        </>
+    );
+};
+const List = () => {
+    return (
+        <ul>
+            {list.length !== 0 ? (
+                list.map((post) => {
+                    return (
+                        <li key={post.objectID}>
+                            <span>
+                                <a href={post.url} target="_blank">
+                                    {post.title}
+                                </a>
+                            </span>
+                            <span> - {post.author}</span>
+                            <span> [comments: {post.num_comments}]</span>
+                            <span> [points: {post.points}]</span>
+                        </li>
+                    );
+                })
+            ) : (
+                <h1>There's nothing to see here.</h1>
+            )}
+        </ul>
+    );
+};
 
-const Search = () => (
-    <>
-        <label htmlFor="search">Search: </label>
-        <input type="text" id="search" />
-    </>
-);
+const Search = () => {
+    const handleChange = (e): void => {
+        console.log(e.target.value);
+    }
+    const handleBlur = (e): void => {
+        console.log('lost focus');
+    }
+
+    return (
+        <>
+            <label htmlFor="search">Search: </label>
+            <input type="text" id="search" onBlur={handleBlur} onChange={handleChange} />
+        </>
+    );
+};
 
 export default App;

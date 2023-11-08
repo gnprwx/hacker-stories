@@ -20,11 +20,15 @@ const App = () => {
             objectID: 1,
         },
     ];
+    const handleSearch = (e) => {
+        console.log(e.target.value)
+    }
+
     return (
         <>
             <div className="center">
                 <h1>Hacker Stories</h1>
-                <Search />
+                <Search onSearch={handleSearch} />
             </div>
             <hr />
             <Posts list={stories} />
@@ -35,38 +39,36 @@ const App = () => {
 const Posts = (props) => (
     <ul>
         {props.list.map((post) => (
-            <Post key={post.objectID} post={post} />
+            <Post key={post.objectID} postItem={post} />
         )
         )}
     </ul>
 );
 
-const Post = ({ post }) => (
+const Post = ({ postItem }) => (
     <li>
         <span>
-            <a href={post.url} target="_blank">
-                {post.title}
+            <a href={postItem.url} target="_blank">
+                {postItem.title}
             </a>
         </span>
-        <span> - {post.author}</span>
-        <span> [comments: {post.num_comments}]</span>
-        <span> [points: {post.points}]</span>
+        <span> - {postItem.author}</span>
+        <span> [comments: {postItem.num_comments}]</span>
+        <span> [points: {postItem.points}]</span>
     </li>
 )
 
-const Search = () => {
+const Search = (props) => {
     const [search, setSearch] = useState('');
     const handleChange = (e): void => {
         setSearch(e.target.value);
-    }
-    const handleBlur = (e): void => {
-        console.log('lost focus');
+        props.onSearch(e);
     }
 
     return (
         <>
             <label htmlFor="search">Search: </label>
-            <input type="text" id="search" onBlur={handleBlur} onChange={handleChange} />
+            <input type="text" id="search" onChange={handleChange} />
             <p>Searching for: {search}</p>
         </>
     );

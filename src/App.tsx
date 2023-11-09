@@ -31,7 +31,7 @@ const App = () => {
         <>
             <div className="center">
                 <h1>Hacker Stories</h1>
-                <Search searchEntry={search} onSearch={handleSearch} />
+                <Search onSearch={handleSearch} searchEntry={search} />
             </div>
             <hr />
             <Posts list={filtered} />
@@ -39,9 +39,9 @@ const App = () => {
     );
 };
 
-const Posts = (props) => (
+const Posts = ({ list }) => (
     <ul>
-        {props.list.map((post) => (
+        {list.map((post) => (
             <Post key={post.objectID} postItem={post} />
         )
         )}
@@ -61,11 +61,11 @@ const Post = ({ postItem }) => (
     </li>
 )
 
-const Search = (props) => {
+const Search = ({ onSearch, searchEntry }) => {
     return (
         <>
             <label htmlFor="search">Search: </label>
-            <input type="text" id="search" onChange={props.onSearch} value={props.searchEntry}/>
+            <input type="text" id="search" onChange={onSearch} value={searchEntry} />
         </>
     );
 };

@@ -48,18 +48,20 @@ const Posts = ({ list }) => (
     </ul>
 );
 
-const Post = ({ postItem }) => (
+const Post = ({ postItem: { url, title, author, num_comments, points } }) =>
+(
     <li>
         <span>
-            <a href={postItem.url} target="_blank">
-                {postItem.title}
+            <a href={url} target="_blank">
+                {title}
             </a>
         </span>
-        <span> - {postItem.author}</span>
-        <span> [comments: {postItem.num_comments}]</span>
-        <span> [points: {postItem.points}]</span>
+        <span> - {author}</span>
+        <span> [comments: {num_comments}]</span>
+        <span> [points: {points}]</span>
     </li>
 )
+
 
 const Search = ({ onSearch, searchEntry }) =>
 (

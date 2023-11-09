@@ -42,23 +42,23 @@ const App = () => {
 const Posts = ({ list }) => (
     <ul>
         {list.map((post) => (
-            <Post key={post.objectID} {...post} />
+            <Post key={post.objectID} singlePost={post} />
         )
         )}
     </ul>
 );
 
-const Post = ({ url, title, author, num_comments, points }) =>
+const Post = ({ singlePost }) =>
 (
     <li>
         <span>
-            <a href={url} target="_blank">
-                {title}
+            <a href={singlePost.url} target="_blank">
+                {singlePost.title}
             </a>
         </span>
-        <span> - {author}</span>
-        <span> [comments: {num_comments}]</span>
-        <span> [points: {points}]</span>
+        <span> - {singlePost.author}</span>
+        <span> [comments: {singlePost.num_comments}]</span>
+        <span> [points: {singlePost.points}]</span>
     </li>
 )
 

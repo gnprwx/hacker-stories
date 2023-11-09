@@ -61,13 +61,12 @@ const Post = ({ postItem }) => (
     </li>
 )
 
-const Search = ({ onSearch, searchEntry }) => {
-    return (
-        <>
-            <label htmlFor="search">Search: </label>
-            <input type="text" id="search" onChange={onSearch} value={searchEntry} />
-        </>
-    );
-};
+const Search = ({ onSearch, searchEntry }) =>
+(
+    <>
+        <label htmlFor="search">Search: </label>
+        <input type="text" id="search" onChange={onSearch} value={searchEntry} />
+    </>
+);
 
 export default App;

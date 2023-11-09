@@ -42,13 +42,13 @@ const App = () => {
 const Posts = ({ list }) => (
     <ul>
         {list.map((post) => (
-            <Post key={post.objectID} postItem={post} />
+            <Post key={post.objectID} {...post} />
         )
         )}
     </ul>
 );
 
-const Post = ({ postItem: { url, title, author, num_comments, points } }) =>
+const Post = ({ url, title, author, num_comments, points }) =>
 (
     <li>
         <span>

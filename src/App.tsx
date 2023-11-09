@@ -24,13 +24,14 @@ const App = () => {
     const handleSearch = (e) => {
         setSearch(e.target.value)
     }
-    const filtered = stories.filter((story) => story.title.toLowerCase().includes(search));
+
+    const filtered = stories.filter((story) => story.title.toLowerCase().includes(search.toLowerCase()));
 
     return (
         <>
             <div className="center">
                 <h1>Hacker Stories</h1>
-                <Search onSearch={handleSearch} />
+                <Search searchEntry={search} onSearch={handleSearch} />
             </div>
             <hr />
             <Posts list={filtered} />
@@ -64,7 +65,7 @@ const Search = (props) => {
     return (
         <>
             <label htmlFor="search">Search: </label>
-            <input type="text" id="search" onChange={props.onSearch} />
+            <input type="text" id="search" onChange={props.onSearch} value={props.searchEntry}/>
         </>
     );
 };

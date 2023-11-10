@@ -2,7 +2,7 @@ import { useState } from "react";
 import "./App.css";
 
 const App = () => {
-    const [search, setSearch] = useState('');
+    const [search, setSearch] = useState(localStorage.getItem('search') || 'React');
     const stories = [
         {
             title: "React",
@@ -23,6 +23,7 @@ const App = () => {
     ];
     const handleSearch = (e) => {
         setSearch(e.target.value)
+        localStorage.setItem('search', e.target.value);
     }
 
     const filtered = stories.filter((story) => story.title.toLowerCase().includes(search.toLowerCase()));

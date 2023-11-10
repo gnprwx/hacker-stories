@@ -1,8 +1,17 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
 
 const App = () => {
-    const [search, setSearch] = useState(localStorage.getItem('search') || 'React');
+    const useStorageState = (initialState) => {
+        const [value, setValue] = useState(localStorage.getItem('value') || initialState);
+        useEffect(() => {
+            localStorage.setItem('value', value);
+        }, [value]);
+        return [value, setValue];
+    }
+
+    const [searchTerm, setSearchTerm] = useStorageState('React');
+
     const stories = [
         {
             title: "React",
@@ -22,17 +31,16 @@ const App = () => {
         },
     ];
     const handleSearch = (e) => {
-        setSearch(e.target.value)
-        localStorage.setItem('search', e.target.value);
+        setSearchTerm(e.target.value)
     }
 
-    const filtered = stories.filter((story) => story.title.toLowerCase().includes(search.toLowerCase()));
+    const filtered = stories.filter((story) => story.title.toLowerCase().includes(searchTerm.toLowerCase()));
 
     return (
         <>
             <div className="center">
                 <h1>Hacker Stories</h1>
-                <Search onSearch={handleSearch} searchEntry={search} />
+                <Search onSearch={handleSearch} searchEntry={searchTerm} />
             </div>
             <hr />
             <Posts list={filtered} />

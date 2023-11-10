@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./App.css";
 
 const App = () => {
@@ -9,8 +9,7 @@ const App = () => {
         }, [key, value]);
         return [value, setValue];
     }
-
-    const [searchTerm, setSearchTerm] = useStorageState('search', 'React');
+    const [searchTerm, setSearchTerm] = useStorageState('search', '');
 
     const stories = [
         {
@@ -40,7 +39,10 @@ const App = () => {
         <>
             <div className="center">
                 <h1>Hacker Stories</h1>
-                <Search onSearch={handleSearch} searchEntry={searchTerm} />
+
+                <InputWithLabel id="search" onInputChange={handleSearch} value={searchTerm} isFocused>
+                    <span style={{ fontWeight: "bold" }}>Search:</span>
+                </InputWithLabel>
             </div>
             <hr />
             <Posts list={filtered} />
@@ -72,11 +74,11 @@ const Post = ({ singlePost }) =>
 )
 
 
-const Search = ({ onSearch, searchEntry }) =>
+const InputWithLabel = ({ id, value, onInputChange, type = 'text', children, isFocused }) =>
 (
     <>
-        <label htmlFor="search">Search: </label>
-        <input type="text" id="search" onChange={onSearch} value={searchEntry} />
+        <label htmlFor={id}>{children}</label>
+        <input type={type} id={id} onChange={onInputChange} value={value} autoFocus={isFocused} />
     </>
 );
 

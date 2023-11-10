@@ -2,15 +2,15 @@ import { useEffect, useState } from "react";
 import "./App.css";
 
 const App = () => {
-    const useStorageState = (initialState) => {
-        const [value, setValue] = useState(localStorage.getItem('value') || initialState);
+    const useStorageState = (key, initialState) => {
+        const [value, setValue] = useState(localStorage.getItem(key) || initialState);
         useEffect(() => {
-            localStorage.setItem('value', value);
-        }, [value]);
+            localStorage.setItem(key, value);
+        }, [key, value]);
         return [value, setValue];
     }
 
-    const [searchTerm, setSearchTerm] = useStorageState('React');
+    const [searchTerm, setSearchTerm] = useStorageState('search', 'React');
 
     const stories = [
         {

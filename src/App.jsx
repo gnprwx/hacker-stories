@@ -14,25 +14,7 @@ const App = () => {
 	};
 
 	const [searchTerm, setSearchTerm] = useStorageState("search", "");
-
-	const initialStories = [
-		{
-			title: "React",
-			url: "https://reactjs.org/",
-			author: "Jordan Walke",
-			num_comments: 3,
-			points: 4,
-			objectID: 0,
-		},
-		{
-			title: "Redux",
-			url: "https://redux.js.org/",
-			author: "Dan Abramov, Andrew Clark",
-			num_comments: 2,
-			points: 5,
-			objectID: 1,
-		},
-	];
+	const ENDPOINT_API = "https://hn.algolia.com/api/v1/search?query=react";
 
 	const storyReducer = (state, action) => {
 		switch (action.type) {
@@ -74,24 +56,22 @@ const App = () => {
 
 	useEffect(() => {
 		dispatchStories({ type: "STORIES_FETCH_INIT" });
-
-		getAsyncStories()
-			.then((result) => {
+		const getAsyncStories = async () => {
+			try {
+				const result = await fetch(ENDPOINT_API);
+				const data = await result.json();
 				dispatchStories({
 					type: "STORIES_FETCH_SUCCESS",
-					payload: result.data.stories,
+					payload: data.hits.map((hit) => {
+						return hit;
+					}),
 				});
-			})
-			.catch(() => dispatchStories({ type: "STORIES_FETCH_FAILURE" }));
+			} catch (error) {
+				dispatchStories({ type: "STORIES_FETCH_FAILURE" });
+			}
+		};
+		getAsyncStories();
 	}, []);
-
-	const getAsyncStories = () => {
-		return new Promise((resolve) => {
-			setTimeout(() => {
-				resolve({ data: { stories: initialStories } });
-			}, 2000);
-		});
-	};
 
 	const handleSearch = (e) => {
 		setSearchTerm(e.target.value);

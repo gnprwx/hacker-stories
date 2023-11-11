@@ -73,9 +73,6 @@ const App = () => {
 		getAsyncStories();
 	}, []);
 
-	const handleSearch = (e) => {
-		setSearchTerm(e.target.value);
-	};
 	const handleRemoveStory = (post) => {
 		dispatchStories({
 			type: "REMOVE_STORY",
@@ -83,7 +80,11 @@ const App = () => {
 		});
 	};
 
-	const filtered = stories.data.filter((story) =>
+	const handleSearch = (e) => {
+		setSearchTerm(e.target.value);
+	};
+
+	const searchFilter = stories.data.filter((story) =>
 		story.title.toLowerCase().includes(searchTerm.toLowerCase())
 	);
 
@@ -106,7 +107,7 @@ const App = () => {
 			{stories.isLoading ? (
 				<p>Fetching data...</p>
 			) : (
-				<Posts list={filtered} onRemovePost={handleRemoveStory} />
+				<Posts list={searchFilter} onRemovePost={handleRemoveStory} />
 			)}
 		</>
 	);

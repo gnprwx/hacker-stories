@@ -14,7 +14,7 @@ const App = () => {
 	};
 
 	const [searchTerm, setSearchTerm] = useStorageState("search", "");
-	const ENDPOINT_API = "https://hn.algolia.com/api/v1/search?query=react";
+	const ENDPOINT_API = "https://hn.algolia.com/api/v1/search?query=";
 
 	const storyReducer = (state, action) => {
 		switch (action.type) {
@@ -58,13 +58,11 @@ const App = () => {
 		dispatchStories({ type: "STORIES_FETCH_INIT" });
 		const getAsyncStories = async () => {
 			try {
-				const result = await fetch(ENDPOINT_API);
-				const data = await result.json();
+				const response = await fetch(ENDPOINT_API + "react");
+				const result = await response.json();
 				dispatchStories({
 					type: "STORIES_FETCH_SUCCESS",
-					payload: data.hits.map((hit) => {
-						return hit;
-					}),
+					payload: result.hits,
 				});
 			} catch (error) {
 				dispatchStories({ type: "STORIES_FETCH_FAILURE" });

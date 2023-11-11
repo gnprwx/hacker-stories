@@ -10,8 +10,7 @@ const App = () => {
         return [value, setValue];
     }
     const [searchTerm, setSearchTerm] = useStorageState('search', '');
-
-    const stories = [
+    const initialStories = [
         {
             title: "React",
             url: "https://reactjs.org/",
@@ -29,8 +28,14 @@ const App = () => {
             objectID: 1,
         },
     ];
+    const [stories, setStories] = useState(initialStories);
     const handleSearch = (e) => {
         setSearchTerm(e.target.value)
+    }
+    const handleRemoveStory = (post) => {
+        const newStories = stories.filter((story) =>
+            post.objectID !== story.objectID);
+        setStories(newStories);
     }
 
     const filtered = stories.filter((story) => story.title.toLowerCase().includes(searchTerm.toLowerCase()));
@@ -45,33 +50,34 @@ const App = () => {
                 </InputWithLabel>
             </div>
             <hr />
-            <Posts list={filtered} />
+            <Posts list={filtered} onRemovePost={handleRemoveStory} />
         </>
     );
 };
 
-const Posts = ({ list }) => (
+const Posts = ({ list, onRemovePost }) => (
     <ul>
         {list.map((post) => (
-            <Post key={post.objectID} singlePost={post} />
+            <Post key={post.objectID} singlePost={post} onRemovePost={onRemovePost} />
         )
         )}
     </ul>
 );
 
-const Post = ({ singlePost }) =>
-(
-    <li>
-        <span>
-            <a href={singlePost.url} target="_blank">
-                {singlePost.title}
-            </a>
-        </span>
-        <span> - {singlePost.author}</span>
-        <span> [comments: {singlePost.num_comments}]</span>
-        <span> [points: {singlePost.points}]</span>
-    </li>
-)
+const Post = ({ singlePost, onRemovePost }) => (
+    <>
+        <li>
+            <span>
+                <a href={singlePost.url} target="_blank">
+                    {singlePost.title}
+                </a>
+            </span>
+            <span> - {singlePost.author}</span>
+            <span> [comments: {singlePost.num_comments}]</span>
+            <span> [points: {singlePost.points}]</span>
+            <button type="button" onClick={() => onRemovePost(singlePost)}>Delete</button>
+        </li>
+    </>);
 
 
 const InputWithLabel = ({ id, value, onInputChange, type = 'text', children, isFocused }) =>

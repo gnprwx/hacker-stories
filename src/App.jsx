@@ -12,7 +12,9 @@ const App = () => {
 		}, [key, value]);
 		return [value, setValue];
 	};
+
 	const [searchTerm, setSearchTerm] = useStorageState("search", "");
+
 	const initialStories = [
 		{
 			title: "React",
@@ -69,8 +71,10 @@ const App = () => {
 		isLoading: false,
 		isError: false,
 	});
+
 	useEffect(() => {
 		dispatchStories({ type: "STORIES_FETCH_INIT" });
+
 		getAsyncStories()
 			.then((result) => {
 				dispatchStories({
@@ -78,8 +82,9 @@ const App = () => {
 					payload: result.data.stories,
 				});
 			})
-			.catch(() => dispatchStories({ type: "STORIES.FETCH.FAILURE" }));
+			.catch(() => dispatchStories({ type: "STORIES_FETCH_FAILURE" }));
 	}, []);
+
 	const getAsyncStories = () => {
 		return new Promise((resolve) => {
 			setTimeout(() => {
@@ -117,12 +122,12 @@ const App = () => {
 				</InputWithLabel>
 			</div>
 			<hr />
+			{stories.isError && <p>Something went wrong!</p>}
 			{stories.isLoading ? (
 				<p>Fetching data...</p>
 			) : (
 				<Posts list={filtered} onRemovePost={handleRemoveStory} />
 			)}
-			{stories.isError && "Something went wrong!"}
 		</>
 	);
 };

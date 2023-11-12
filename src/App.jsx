@@ -54,22 +54,24 @@ const App = () => {
 		isError: false,
 	});
 
-	useEffect(() => {
+	const getAsyncStories = async () => {
+		if (!searchTerm) return;
 		dispatchStories({ type: "STORIES_FETCH_INIT" });
-		const getAsyncStories = async () => {
-			try {
-				const response = await fetch(ENDPOINT_API + "react");
-				const data = await response.json();
-				dispatchStories({
-					type: "STORIES_FETCH_SUCCESS",
-					payload: data.hits,
-				});
-			} catch (error) {
-				dispatchStories({ type: "STORIES_FETCH_FAILURE" });
-			}
-		};
+		try {
+			const response = await fetch(ENDPOINT_API + searchTerm);
+			const data = await response.json();
+			dispatchStories({
+				type: "STORIES_FETCH_SUCCESS",
+				payload: data.hits,
+			});
+		} catch (error) {
+			dispatchStories({ type: "STORIES_FETCH_FAILURE" });
+		}
+	};
+
+	useEffect(() => {
 		getAsyncStories();
-	}, []);
+	}, [searchTerm]);
 
 	const handleRemoveStory = (post) => {
 		dispatchStories({
@@ -81,10 +83,6 @@ const App = () => {
 	const handleSearch = (e) => {
 		setSearchTerm(e.target.value);
 	};
-
-	const searchFilter = stories.data.filter((story) =>
-		story.title.toLowerCase().includes(searchTerm.toLowerCase())
-	);
 
 	return (
 		<>
@@ -105,7 +103,7 @@ const App = () => {
 			{stories.isLoading ? (
 				<p>Fetching data...</p>
 			) : (
-				<Posts list={searchFilter} onRemovePost={handleRemoveStory} />
+				<Posts list={stories.data} onRemovePost={handleRemoveStory} />
 			)}
 		</>
 	);

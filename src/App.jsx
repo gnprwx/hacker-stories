@@ -1,6 +1,6 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useReducer, useState } from "react";
+import axios from "axios";
 import "./App.css";
-import { useReducer } from "react";
 
 const App = () => {
 	const useStorageState = (key, initialState) => {
@@ -50,29 +50,29 @@ const App = () => {
 				throw new Error();
 		}
 	};
+
 	const [stories, dispatchStories] = useReducer(storyReducer, {
 		data: [],
 		isLoading: false,
 		isError: false,
 	});
 
-	const getAsyncStories = async () => {
+	const getAsyncStories = useCallback(async () => {
 		dispatchStories({ type: "STORIES_FETCH_INIT" });
 		try {
-			const response = await fetch(url);
-			const data = await response.json();
+			const result = await axios.get(url);
 			dispatchStories({
 				type: "STORIES_FETCH_SUCCESS",
-				payload: data.hits,
+				payload: result.data.hits,
 			});
 		} catch (error) {
 			dispatchStories({ type: "STORIES_FETCH_FAILURE" });
 		}
-	};
+	}, [url]);
 
 	useEffect(() => {
 		getAsyncStories();
-	}, [url]);
+	}, [getAsyncStories]);
 
 	const handleRemoveStory = (post) => {
 		dispatchStories({

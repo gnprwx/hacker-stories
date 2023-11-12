@@ -85,28 +85,20 @@ const App = () => {
 		setSearchTerm(e.target.value);
 	};
 
-	const handleSearchSubmit = () => {
+	const handleSearchSubmit = (e) => {
 		setUrl(ENDPOINT_API + searchTerm);
+		e.preventDefault();
 	};
 
 	return (
 		<>
 			<div className="center">
 				<h1>Hacker Stories</h1>
-
-				<InputWithLabel
-					id="search"
-					onInputChange={handleSearchInput}
-					value={searchTerm}
-					isFocused
+				<SearchForm
+					onSearchSubmit={handleSearchSubmit}
+					onSearchInput={handleSearchInput}
+					searchTerm={searchTerm}
 				/>
-				<button
-					type="button"
-					disabled={!searchTerm}
-					onClick={handleSearchSubmit}
-				>
-					Search
-				</button>
 			</div>
 			<hr />
 			{stories.isError && <p>Something went wrong!</p>}
@@ -118,6 +110,22 @@ const App = () => {
 		</>
 	);
 };
+
+const SearchForm = ({ onSearchSubmit, onSearchInput, searchTerm }) => (
+	<form onSubmit={onSearchSubmit}>
+		<InputWithLabel
+			id="search"
+			onInputChange={onSearchInput}
+			value={searchTerm}
+			isFocused
+		>
+			<span style={{ fontWeight: "bold" }}>Search: </span>
+		</InputWithLabel>
+		<button type="submit" disabled={!searchTerm}>
+			Submit
+		</button>
+	</form>
+);
 
 const Posts = ({ list, onRemovePost }) => (
 	<ul id="postList">
@@ -150,16 +158,16 @@ const InputWithLabel = ({
 	value,
 	onInputChange,
 	type = "text",
-	placeholder = "Search",
+	children,
 	isFocused,
 }) => (
 	<>
+		<span>{children}</span>
 		<input
 			type={type}
 			id={id}
 			onChange={onInputChange}
 			value={value}
-			placeholder={placeholder}
 			autoFocus={isFocused}
 		/>
 	</>

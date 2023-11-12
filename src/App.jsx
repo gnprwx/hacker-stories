@@ -12,11 +12,11 @@ const App = () => {
 		}, [key, value]);
 		return [value, setValue];
 	};
+	
+	const ENDPOINT_API = "https://hn.algolia.com/api/v1/search?query=";
 
 	const [searchTerm, setSearchTerm] = useStorageState("search", "");
-	const [onClickSearch, setOnClickSearch] = useState(searchTerm);
-
-	const ENDPOINT_API = "https://hn.algolia.com/api/v1/search?query=";
+	const [url, setUrl] = useState(ENDPOINT_API + searchTerm);
 
 	const storyReducer = (state, action) => {
 		switch (action.type) {
@@ -60,7 +60,7 @@ const App = () => {
 		if (!searchTerm) return;
 		dispatchStories({ type: "STORIES_FETCH_INIT" });
 		try {
-			const response = await fetch(ENDPOINT_API + searchTerm);
+			const response = await fetch(url);
 			const data = await response.json();
 			dispatchStories({
 				type: "STORIES_FETCH_SUCCESS",
@@ -73,7 +73,7 @@ const App = () => {
 
 	useEffect(() => {
 		getAsyncStories();
-	}, [onClickSearch]);
+	}, [url]);
 
 	const handleRemoveStory = (post) => {
 		dispatchStories({
@@ -82,9 +82,14 @@ const App = () => {
 		});
 	};
 
-	const handleSearch = (e) => {
+	const handleSearchInput = (e) => {
 		setSearchTerm(e.target.value);
 	};
+
+	const handleSearchSubmit = () => {
+		setUrl(ENDPOINT_API + searchTerm);
+	};
+
 	return (
 		<>
 			<div className="center">
@@ -92,13 +97,17 @@ const App = () => {
 
 				<InputWithLabel
 					id="search"
-					onInputChange={handleSearch}
+					onInputChange={handleSearchInput}
 					value={searchTerm}
 					isFocused
 				>
 					<span style={{ fontWeight: "bold" }}>Search: </span>
 				</InputWithLabel>
-				<button type="button" onClick={() => setOnClickSearch(searchTerm)}>
+				<button
+					type="button"
+					disabled={!searchTerm}
+					onClick={handleSearchSubmit}
+				>
 					Submit
 				</button>
 			</div>

@@ -99,15 +99,14 @@ const App = () => {
 					onInputChange={handleSearchInput}
 					value={searchTerm}
 					isFocused
-				>
-					<span style={{ fontWeight: "bold" }}>Search: </span>
-				</InputWithLabel>
+				/>
 				<button
 					type="button"
 					disabled={!searchTerm}
 					onClick={handleSearchSubmit}
+					style={{ margin: "5px" }}
 				>
-					Submit
+					Search
 				</button>
 			</div>
 			<hr />
@@ -152,16 +151,16 @@ const InputWithLabel = ({
 	value,
 	onInputChange,
 	type = "text",
-	children,
+	placeholder = "Search",
 	isFocused,
 }) => (
 	<>
-		<label htmlFor={id}>{children}</label>
 		<input
 			type={type}
 			id={id}
 			onChange={onInputChange}
 			value={value}
+			placeholder={placeholder}
 			autoFocus={isFocused}
 		/>
 	</>

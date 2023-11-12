@@ -3,7 +3,7 @@ import axios from "axios";
 import "./App.css";
 
 const App = () => {
-	const useStorageState = (key, initialState) => {
+	const useStorageState = (key: string, initialState: string) => {
 		const [value, setValue] = useState(
 			localStorage.getItem(key) || initialState
 		);

@@ -59,10 +59,10 @@ const App = () => {
 		const getAsyncStories = async () => {
 			try {
 				const response = await fetch(ENDPOINT_API + "react");
-				const result = await response.json();
+				const data = await response.json();
 				dispatchStories({
 					type: "STORIES_FETCH_SUCCESS",
-					payload: result.hits,
+					payload: data.hits,
 				});
 			} catch (error) {
 				dispatchStories({ type: "STORIES_FETCH_FAILURE" });

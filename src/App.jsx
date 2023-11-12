@@ -104,7 +104,6 @@ const App = () => {
 					type="button"
 					disabled={!searchTerm}
 					onClick={handleSearchSubmit}
-					style={{ margin: "5px" }}
 				>
 					Search
 				</button>
@@ -121,7 +120,7 @@ const App = () => {
 };
 
 const Posts = ({ list, onRemovePost }) => (
-	<ul>
+	<ul id="postList">
 		{list.map((post) => (
 			<Post key={post.objectID} singlePost={post} onRemovePost={onRemovePost} />
 		))}
@@ -130,7 +129,7 @@ const Posts = ({ list, onRemovePost }) => (
 
 const Post = ({ singlePost, onRemovePost }) => (
 	<>
-		<li>
+		<li className="postEntry">
 			<span>
 				<a href={singlePost.url} target="_blank">
 					{singlePost.title}

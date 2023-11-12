@@ -14,6 +14,8 @@ const App = () => {
 	};
 
 	const [searchTerm, setSearchTerm] = useStorageState("search", "");
+	const [onClickSearch, setOnClickSearch] = useState(searchTerm);
+
 	const ENDPOINT_API = "https://hn.algolia.com/api/v1/search?query=";
 
 	const storyReducer = (state, action) => {
@@ -71,7 +73,7 @@ const App = () => {
 
 	useEffect(() => {
 		getAsyncStories();
-	}, [searchTerm]);
+	}, [onClickSearch]);
 
 	const handleRemoveStory = (post) => {
 		dispatchStories({
@@ -83,7 +85,6 @@ const App = () => {
 	const handleSearch = (e) => {
 		setSearchTerm(e.target.value);
 	};
-
 	return (
 		<>
 			<div className="center">
@@ -97,6 +98,9 @@ const App = () => {
 				>
 					<span style={{ fontWeight: "bold" }}>Search: </span>
 				</InputWithLabel>
+				<button type="button" onClick={() => setOnClickSearch(searchTerm)}>
+					Submit
+				</button>
 			</div>
 			<hr />
 			{stories.isError && <p>Something went wrong!</p>}

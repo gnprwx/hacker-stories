@@ -12,7 +12,7 @@ const App = () => {
 		}, [key, value]);
 		return [value, setValue];
 	};
-	
+
 	const ENDPOINT_API = "https://hn.algolia.com/api/v1/search?query=";
 
 	const [searchTerm, setSearchTerm] = useStorageState("search", "");
@@ -57,7 +57,6 @@ const App = () => {
 	});
 
 	const getAsyncStories = async () => {
-		if (!searchTerm) return;
 		dispatchStories({ type: "STORIES_FETCH_INIT" });
 		try {
 			const response = await fetch(url);

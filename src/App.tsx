@@ -1,9 +1,77 @@
-import { useCallback, useEffect, useReducer, useState } from "react";
+import { ChangeEvent, FormEvent, ReactNode, useCallback, useEffect, useReducer, useState } from "react";
 import axios from "axios";
 import "./App.css";
 
+// Begin Types
+type Post = {
+	objectID: string;
+	url: string;
+	title: string;
+	author: string;
+	num_comments: number;
+	points: number;
+}
+type Posts = Post[];
+
+type PostsState = {
+	data: Posts;
+	isLoading: boolean;
+	isError: boolean;
+}
+
+type SearchFormProps = {
+	searchTerm: string;
+	onSearchInput: (event: ChangeEvent<HTMLInputElement>) => void;
+	onSearchSubmit: (event: FormEvent<HTMLFormElement>) => void;
+}
+
+type PostsProps = {
+	list: Posts;
+	onRemovePost: (list: Post) => void;
+}
+
+type PostProps = {
+	singlePost: Post;
+	onRemovePost: (singlePost: Post) => void
+}
+
+type InputWithLabelProps = {
+	id: string;
+	value: string;
+	type?: string;
+	onInputChange: (e: ChangeEvent<HTMLInputElement>) => void;
+	isFocused?: boolean;
+	children: ReactNode;
+}
+
+type StoriesFetchInitAction = {
+	type: 'STORIES_FETCH_INIT';
+}
+
+type StoriesFetchSuccessAction = {
+	type: 'STORIES_FETCH_SUCCESS';
+	payload: Posts;
+}
+
+type StoriesFetchFailureAction = {
+	type: 'STORIES_FETCH_FAILURE';
+}
+
+type StoriesRemoveAction = {
+	type: 'REMOVE_STORY';
+	payload: Post;
+}
+
+type PostsAction =
+	StoriesFetchInitAction
+	| StoriesFetchSuccessAction
+	| StoriesFetchFailureAction
+	| StoriesRemoveAction;
+// End Types
+
 const App = () => {
-	const useStorageState = (key: string, initialState: string) => {
+	const useStorageState = (key: string, initialState: string)
+		: [string, (newValue: string) => void] => {
 		const [value, setValue] = useState(
 			localStorage.getItem(key) || initialState
 		);
@@ -18,7 +86,7 @@ const App = () => {
 	const [searchTerm, setSearchTerm] = useStorageState("search", "");
 	const [url, setUrl] = useState(ENDPOINT_API + searchTerm);
 
-	const storyReducer = (state, action) => {
+	const postsReducer = (state: PostsState, action: PostsAction) => {
 		switch (action.type) {
 			case "STORIES_FETCH_INIT":
 				return {
@@ -51,7 +119,7 @@ const App = () => {
 		}
 	};
 
-	const [stories, dispatchStories] = useReducer(storyReducer, {
+	const [stories, dispatchStories] = useReducer(postsReducer, {
 		data: [],
 		isLoading: false,
 		isError: false,
@@ -74,18 +142,18 @@ const App = () => {
 		getAsyncStories();
 	}, [getAsyncStories]);
 
-	const handleRemoveStory = (post) => {
+	const handleRemoveStory = (post: Post) => {
 		dispatchStories({
 			type: "REMOVE_STORY",
 			payload: post,
 		});
 	};
 
-	const handleSearchInput = (e) => {
+	const handleSearchInput = (e: ChangeEvent<HTMLInputElement>) => {
 		setSearchTerm(e.target.value);
 	};
 
-	const handleSearchSubmit = (e) => {
+	const handleSearchSubmit = (e: FormEvent<HTMLFormElement>) => {
 		setUrl(ENDPOINT_API + searchTerm);
 		e.preventDefault();
 	};
@@ -111,7 +179,7 @@ const App = () => {
 	);
 };
 
-const SearchForm = ({ onSearchSubmit, onSearchInput, searchTerm }) => (
+const SearchForm = ({ onSearchSubmit, onSearchInput, searchTerm }: SearchFormProps) => (
 	<form onSubmit={onSearchSubmit}>
 		<InputWithLabel
 			id="search"
@@ -127,7 +195,7 @@ const SearchForm = ({ onSearchSubmit, onSearchInput, searchTerm }) => (
 	</form>
 );
 
-const Posts = ({ list, onRemovePost }) => (
+const Posts = ({ list, onRemovePost }: PostsProps) => (
 	<ul id="postList">
 		{list.map((post) => (
 			<Post key={post.objectID} singlePost={post} onRemovePost={onRemovePost} />
@@ -135,7 +203,7 @@ const Posts = ({ list, onRemovePost }) => (
 	</ul>
 );
 
-const Post = ({ singlePost, onRemovePost }) => (
+const Post = ({ singlePost, onRemovePost }: PostProps) => (
 	<>
 		<li className="postEntry">
 			<span>
@@ -160,7 +228,7 @@ const InputWithLabel = ({
 	type = "text",
 	children,
 	isFocused,
-}) => (
+}: InputWithLabelProps) => (
 	<>
 		<span>{children}</span>
 		<input
